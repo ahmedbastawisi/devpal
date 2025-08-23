@@ -12,7 +12,7 @@ internal sealed partial class JwtPage : ContentPage
 {
     public JwtPage()
     {
-        Icon = IconHelpers.FromRelativePath("Assets\\StoreLogo.png");
+        Icon = new IconInfo("\uea86");
         Title = "devpal:jwt";
         Name = "Open";
     }

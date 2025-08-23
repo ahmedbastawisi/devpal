@@ -11,7 +11,7 @@ internal sealed partial class devpalPage : ListPage
 {
     public devpalPage()
     {
-        Icon = IconHelpers.FromRelativePath("Assets\\StoreLogo.png");
+        Icon = IconHelpers.FromRelativePath("Assets\\StoreLogo.scale-100.png");
         Title = "devpal";
         Name = "Open";
     }
@@ -19,7 +19,7 @@ internal sealed partial class devpalPage : ListPage
     public override IListItem[] GetItems()
     {
         return [
-            new ListItem(new JwtPage()) { Title = "jwt" }
+            new ListItem(new JwtPage()) { Title = "decode jwt" }
         ];
     }
 }
