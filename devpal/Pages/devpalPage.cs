@@ -19,7 +19,7 @@ internal sealed partial class devpalPage : ListPage
     public override IListItem[] GetItems()
     {
         return [
-            new ListItem(new NoOpCommand()) { Title = "TODO: Implement your extension here" }
+            new ListItem(new JwtPage()) { Title = "jwt" }
         ];
     }
 }
