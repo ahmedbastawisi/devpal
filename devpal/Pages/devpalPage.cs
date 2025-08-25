@@ -19,7 +19,8 @@ internal sealed partial class devpalPage : ListPage
     public override IListItem[] GetItems()
     {
         return [
-            new ListItem(new JwtPage()) { Title = "decode jwt" }
+            new ListItem(new JwtPage()) { Title = "jwt", Subtitle = "decode jwt" },
+            new ListItem(new GuidPage()) { Title = "guid", Subtitle = "new guid" }
         ];
     }
 }

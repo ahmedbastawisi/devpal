@@ -10,25 +10,25 @@ using Microsoft.CommandPalette.Extensions;
 namespace devpal;
 
 [Guid("a8b1f9d6-955d-4602-bef9-d50b2dcf6ef9")]
-public sealed partial class devpal : IExtension, IDisposable
+public sealed partial class Extension : IExtension, IDisposable
 {
-    private readonly ManualResetEvent _extensionDisposedEvent;
+    private readonly ManualResetEvent extensionDisposedEvent;
 
-    private readonly devpalCommandsProvider _provider = new();
+    private readonly devpalCommandsProvider provider = new();
 
-    public devpal(ManualResetEvent extensionDisposedEvent)
+    public Extension(ManualResetEvent extensionDisposedEvent)
     {
-        this._extensionDisposedEvent = extensionDisposedEvent;
+        this.extensionDisposedEvent = extensionDisposedEvent;
     }
 
     public object? GetProvider(ProviderType providerType)
     {
         return providerType switch
         {
-            ProviderType.Commands => _provider,
+            ProviderType.Commands => provider,
             _ => null,
         };
     }
 
-    public void Dispose() => this._extensionDisposedEvent.Set();
+    public void Dispose() => this.extensionDisposedEvent.Set();
 }

@@ -16,7 +16,7 @@ public partial class devpalCommandsProvider : CommandProvider
         DisplayName = "devpal";
         Icon = IconHelpers.FromRelativePath("Assets\\StoreLogo.png");
         _commands = [
-            new CommandItem(new devpalPage()) { Title = DisplayName },
+            new CommandItem(new devpalPage()) { Title = DisplayName, Subtitle = "Various dev tools" },
         ];
     }
 
