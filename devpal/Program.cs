@@ -9,7 +9,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace devpal;
+namespace Devpal;
 
 public class Program
 {

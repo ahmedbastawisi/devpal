@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace devpal;
+namespace Devpal;
 
 internal sealed partial class GuidPage : DynamicListPage
 {

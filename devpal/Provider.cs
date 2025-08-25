@@ -5,18 +5,18 @@
 using Microsoft.CommandPalette.Extensions;
 using Microsoft.CommandPalette.Extensions.Toolkit;
 
-namespace devpal;
+namespace Devpal;
 
-public partial class devpalCommandsProvider : CommandProvider
+public partial class Provider : CommandProvider
 {
     private readonly ICommandItem[] _commands;
 
-    public devpalCommandsProvider()
+    public Provider()
     {
         DisplayName = "devpal";
         Icon = IconHelpers.FromRelativePath("Assets\\StoreLogo.png");
         _commands = [
-            new CommandItem(new devpalPage()) { Title = DisplayName, Subtitle = "Various dev tools" },
+            new CommandItem(new HomePage()) { Title = DisplayName, Subtitle = "Various dev tools" },
         ];
     }
 

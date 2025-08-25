@@ -5,22 +5,21 @@
 using Microsoft.CommandPalette.Extensions;
 using Microsoft.CommandPalette.Extensions.Toolkit;
 
-namespace devpal;
+namespace Devpal;
 
-internal sealed partial class devpalPage : ListPage
+internal sealed partial class HomePage : ListPage
 {
-    public devpalPage()
+    public HomePage()
     {
         Icon = IconHelpers.FromRelativePath("Assets\\StoreLogo.scale-100.png");
         Title = "devpal";
-        Name = "Open";
     }
 
     public override IListItem[] GetItems()
     {
         return [
             new ListItem(new JwtPage()) { Title = "jwt", Subtitle = "decode jwt" },
-            new ListItem(new GuidPage()) { Title = "guid", Subtitle = "new guid" }
+            new ListItem(new GuidPage()) { Title = "guid", Subtitle = "create new guid" }
         ];
     }
 }
