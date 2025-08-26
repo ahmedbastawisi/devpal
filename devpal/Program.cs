@@ -1,13 +1,8 @@
-// Copyright (c) Microsoft Corporation
-// The Microsoft Corporation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
 using Microsoft.CommandPalette.Extensions;
 using Shmuelie.WinRTServer;
 using Shmuelie.WinRTServer.CsWinRT;
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Devpal;
 
@@ -29,7 +24,7 @@ public class Program
             server.RegisterClass<Extension, IExtension>(() => extensionInstance);
             server.Start();
             
-            // This will make the main thread wait until the event is signalled by the extension class.
+            // This will make the main thread wait until the event is signaled by the extension class.
             // Since we have single instance of the extension object, we exit as soon as it is disposed.
             extensionDisposedEvent.WaitOne();
             server.Stop();

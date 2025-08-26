@@ -1,12 +1,8 @@
-// Copyright (c) Microsoft Corporation
-// The Microsoft Corporation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
 using Microsoft.CommandPalette.Extensions;
 using Microsoft.CommandPalette.Extensions.Toolkit;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Devpal;
 
@@ -18,10 +14,10 @@ internal sealed partial class GuidPage : DynamicListPage
     {
         Name = "guid";
         Title = "devpal: create new guid";
-        PlaceholderText = "Type the number guids you want generated";
+        PlaceholderText = "Type the number guids followed by format ex: 3p, 5x";
         Icon = new IconInfo("\uea86");
 
-        BuildItems(1);
+        BuildItems(1, "d");
     }
 
     public override IListItem[] GetItems()
@@ -31,22 +27,31 @@ internal sealed partial class GuidPage : DynamicListPage
 
     public override void UpdateSearchText(string oldSearch, string newSearch)
     {
-        _ = int.TryParse(newSearch, out int count);
+        var count = 1;
+        var format = "D";
+        var match = Regex.Match(newSearch.Trim(), @"^(?<count>\d+)(?<format>[NnDdBbPpXx])?$");
 
-        BuildItems(Math.Max(Math.Abs(count), 1));
+        if (match.Success)
+        {
+            _ = int.TryParse(match.Groups["count"].Value, out count);
+
+            if (match.Groups["format"].Success)
+            {
+                format = match.Groups["format"].Value;
+            }
+        }
+        BuildItems(count, format);
 
         RaiseItemsChanged();
     }
 
-    private void BuildItems(int count)
+    private void BuildItems(int count, string format)
     {
         items.Clear();
 
-        var requests = Enumerable.Range(1, count);
-
-        foreach (var _ in requests)
+        for (int i = 0; i < count; i++)
         {
-            items.Add(new ListItem { Title = Guid.NewGuid().ToString() });
+            items.Add(new ListItem { Title = Guid.NewGuid().ToString(format) });
         }
     }
 }
