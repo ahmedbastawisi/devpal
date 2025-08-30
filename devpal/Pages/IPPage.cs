@@ -1,6 +1,7 @@
 using Microsoft.CommandPalette.Extensions;
 using Microsoft.CommandPalette.Extensions.Toolkit;
 using System.Diagnostics;
+using Windows.System;
 
 namespace Devpal;
 
@@ -38,7 +39,19 @@ internal sealed partial class IPPage : ListPage
         }
 
         return [
-            new ListItem(new ListItem()) { Title = ip }
+            new ListItem(new ListItem())
+            {
+                Title = ip,
+                MoreCommands = [
+                    new CommandContextItem(new AnonymousCommand(() => ClipboardHelper.SetText(ip))
+                    {
+                        Name = "Copy"
+                    })
+                    { 
+                        RequestedShortcut = KeyChordHelpers.FromModifiers(ctrl: false, shift: false, vkey: VirtualKey.Enter)
+                    }
+                ]
+            }
         ];
     }
 }

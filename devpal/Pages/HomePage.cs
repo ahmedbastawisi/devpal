@@ -15,6 +15,7 @@ internal sealed partial class HomePage : ListPage
     {
         return [
             new ListItem(new GuidPage()) { Title = "guid", Subtitle = "create new guid" },
+            new ListItem(new JwtPage()) { Title = "jwt", Subtitle = "decode bearer token" },
             new ListItem(new IPPage()) { Title = "ip", Subtitle = "find your ip" }
         ];
     }
