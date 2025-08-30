@@ -4,4 +4,5 @@
 
 #### PowerToys Command Palette Extension
 
-- decode jwt
+- create guids
+- find your ip address

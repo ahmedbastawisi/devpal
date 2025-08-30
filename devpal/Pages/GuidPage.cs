@@ -8,7 +8,8 @@ namespace Devpal;
 
 internal sealed partial class GuidPage : DynamicListPage
 {
-    private List<IListItem> items = [];
+    private int count = 1;
+    private string format = "d";
 
     public GuidPage()
     {
@@ -16,19 +17,21 @@ internal sealed partial class GuidPage : DynamicListPage
         Title = "devpal: create new guid";
         PlaceholderText = "Type the number guids followed by format ex: 3p, 5x";
         Icon = new IconInfo("\uea86");
-
-        BuildItems(1, "d");
     }
 
     public override IListItem[] GetItems()
     {
-        return [.. items];
+        var items = new List<IListItem>();
+
+        for (int i = 0; i < count; i++)
+        {
+            items.Add(new ListItem { Title = Guid.NewGuid().ToString(format) });
+        }
+        return items.ToArray();
     }
 
     public override void UpdateSearchText(string oldSearch, string newSearch)
     {
-        var count = 1;
-        var format = "D";
         var match = Regex.Match(newSearch.Trim(), @"^(?<count>\d+)(?<format>[NnDdBbPpXx])?$");
 
         if (match.Success)
@@ -40,18 +43,6 @@ internal sealed partial class GuidPage : DynamicListPage
                 format = match.Groups["format"].Value;
             }
         }
-        BuildItems(count, format);
-
         RaiseItemsChanged();
-    }
-
-    private void BuildItems(int count, string format)
-    {
-        items.Clear();
-
-        for (int i = 0; i < count; i++)
-        {
-            items.Add(new ListItem { Title = Guid.NewGuid().ToString(format) });
-        }
     }
 }

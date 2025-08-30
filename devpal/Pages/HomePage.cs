@@ -14,8 +14,8 @@ internal sealed partial class HomePage : ListPage
     public override IListItem[] GetItems()
     {
         return [
-            new ListItem(new JwtPage()) { Title = "jwt", Subtitle = "decode jwt" },
-            new ListItem(new GuidPage()) { Title = "guid", Subtitle = "create new guid" }
+            new ListItem(new GuidPage()) { Title = "guid", Subtitle = "create new guid" },
+            new ListItem(new IPPage()) { Title = "ip", Subtitle = "find your ip" }
         ];
     }
 }
