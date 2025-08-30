@@ -10,7 +10,7 @@ internal sealed partial class IPPage : ListPage
     public IPPage()
     {
         Name = "ip";
-        Title = "devpal: find your ip";
+        Title = "devpal: find your public ip";
         Icon = new IconInfo("\uea86");
     }
 

@@ -5,4 +5,5 @@
 #### PowerToys Command Palette Extension
 
 - create guids
-- find your ip address
+- decode bearer tokens
+- find your public ip address
