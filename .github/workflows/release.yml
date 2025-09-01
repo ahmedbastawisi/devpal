@@ -1,0 +1,49 @@
+name: Publish Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore devpal/devpal.csproj
+
+      - name: Build MSIX package (x64)
+        run: dotnet publish devpal/devpal.csproj --configuration Release /p:PublishProfile=devpal/Properties/PublishProfiles/win-x64.pubxml
+
+      - name: Build MSIX package (arm64)
+        run: dotnet publish devpal/devpal.csproj --configuration Release /p:PublishProfile=devpal/Properties/PublishProfiles/win-arm64.pubxml
+
+      - name: List all files for debugging
+        run: |
+          echo "Listing all files in workspace after publish:"
+          Get-ChildItem -Recurse | Select-Object FullName
+
+      - name: Find MSIX packages
+        id: find_msix
+        run: |
+          $msixFiles = Get-ChildItem -Recurse -Filter *.msix | Select-Object -First 10
+          $x64 = $msixFiles | Where-Object { $_.FullName -match 'x64' } | Select-Object -First 1
+          $arm64 = $msixFiles | Where-Object { $_.FullName -match 'arm64' } | Select-Object -First 1
+          echo "x64 MSIX: $($x64.FullName)"
+          echo "arm64 MSIX: $($arm64.FullName)"
+          echo "msix_x64=$($x64.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "msix_arm64=$($arm64.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Create GitHub Release and upload MSIX (x64 and arm64)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ github.ref_name }}" "$env:msix_x64" "$env:msix_arm64" --title "Release ${{ github.ref_name }}" --notes "Automated MSIX release for ${{ github.ref_name }} (x64 and arm64)"
