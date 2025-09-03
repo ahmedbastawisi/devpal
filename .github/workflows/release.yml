@@ -9,29 +9,41 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup .NET
+      - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
 
-      - name: Restore dependencies
+      - name: Restore NuGet packages
         run: dotnet restore devpal/devpal.csproj
 
-      - name: Build MSIX package (x64)
+      - name: Publish application (x64)
         run: dotnet publish devpal/devpal.csproj --configuration Release /p:PublishProfile=devpal/Properties/PublishProfiles/win-x64.pubxml
 
-      - name: Build MSIX package (arm64)
+      - name: Publish application (arm64)
         run: dotnet publish devpal/devpal.csproj --configuration Release /p:PublishProfile=devpal/Properties/PublishProfiles/win-arm64.pubxml
 
-      - name: List all files for debugging
+      - name: Install MSIX CLI tool
+        run: dotnet tool install --global msix
+
+      - name: Add MSIX CLI tool to PATH
+        run: echo "$env:USERPROFILE\.dotnet\tools" | Out-File -FilePath $env:GITHUB_PATH -Append
+
+      - name: Create MSIX package (x64)
+        run: msix pack --publish-directory devpal/bin/Release/net9.0/win-x64/publish --output devpal-x64.msix
+
+      - name: Create MSIX package (arm64)
+        run: msix pack --publish-directory devpal/bin/Release/net9.0/win-arm64/publish --output devpal-arm64.msix
+
+      - name: List all files in workspace (for debugging)
         run: |
           echo "Listing all files in workspace after publish:"
           Get-ChildItem -Recurse | Select-Object FullName
 
-      - name: Find MSIX packages
+      - name: Locate generated MSIX packages
         id: find_msix
         run: |
           $msixFiles = Get-ChildItem -Recurse -Filter *.msix | Select-Object -First 10
@@ -42,7 +54,7 @@ jobs:
           echo "msix_x64=$($x64.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
           echo "msix_arm64=$($arm64.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
 
-      - name: Create GitHub Release and upload MSIX (x64 and arm64)
+      - name: Create GitHub Release and upload MSIX packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
